@@ -25,7 +25,9 @@ SECRET_KEY = "django-insecure-7yuyvm4zt(swn#mgl#x7s-kcp2w891mh2_&sy8t+9k41u+39=1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*.herokuapp.com',
+]
 
 # Application definition
 
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://githubdev.vercel.app",
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
