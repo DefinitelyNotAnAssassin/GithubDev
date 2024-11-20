@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '*.herokuapp.com',
+    'githubdev-32db2c6db7f8.herokuapp.com'
 ]
 
 # Application definition
