@@ -5,16 +5,11 @@ import requests
 import json
 
 def get_repo_info(username): 
-    headers = {
-        'Authorization': 'token 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'
-    }
-    
-    try:
-        response = requests.get(f'https://api.github.com/users/{username}/repos?per_page=100', headers=headers)
-        return response.json()
-    except Exception as e:
-        print(e)
-        return []
+
+    response = requests.get(f'https://api.github.com/users/{username}/repos?per_page=100')
+    print(response.text)
+    return response.json()
+
 
 
 def get_repo_loc(username, repo_name):
@@ -27,7 +22,7 @@ def get_repo_loc(username, repo_name):
         return {}
     except Exception as e:
         print(e)
-        return {}
+        return [{}]
 
 
 def getLinesOfCode(request, username):
@@ -45,7 +40,8 @@ def getLinesOfCode(request, username):
     lines_of_code_per_language = {}
 
     for repository in repositories:
-        loc = get_repo_loc(username, repository['name'])
+        print(repository)
+        loc = get_repo_loc(username, repository.get('name'))
         lines_of_code += loc.get('loc', 0)
 
         for lang, count in loc.get('locByLangs', {}).items():
