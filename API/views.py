@@ -6,7 +6,7 @@ import json
 
 def get_repo_info(username): 
     headers = {
-        'Authorization': 'token '
+        'Authorization': 'token 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'
     }
     
     response = requests.get(f'https://api.github.com/users/{username}/repos?per_page=100', headers=headers)
