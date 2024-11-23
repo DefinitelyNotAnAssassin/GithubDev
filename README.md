@@ -1,3 +1,8 @@
+# GithubDev 
+
+A project inspired by [ghloc](https://github.com/subtle-byte/ghloc).
+
+This project aims to count all the lines of code in the repositories of a GitHub profile. It provides customization options to ignore specific directories and file extensions during the analysis. This allows users to get accurate statistics based on their preferences.
 
 ## Setup
 
@@ -12,7 +17,7 @@
 1. Clone the repository:
 
     ```sh
-    git clone <https://github.com/DefinitelyNotAnAssassin/GithubDev.git>
+    git clone https://github.com/DefinitelyNotAnAssassin/GithubDev.git
     cd backend
     ```
 
