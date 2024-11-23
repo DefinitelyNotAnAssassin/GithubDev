@@ -3,3 +3,4 @@ from Models.models import UserRecord
 
 
 admin.site.register(UserRecord)
+
