@@ -7,9 +7,9 @@ import requests
 import json
 import time
 from asyncio.exceptions import CancelledError
-import environ
-GITHUB_TOKEN = environ.Env().str('GITHUB_TOKEN')    
-GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=100'
+import os
+GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
+GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=5'
 MAX_REPOSITORY_SIZE = 150000 # kilobytes
 
 def get_repo_info(username):
@@ -40,6 +40,12 @@ def getLeaderboard(request):
     
     return JsonResponse({'users': users_list, 'count': count}, status=200)
 
+
+def refreshAccountData(request, username):
+    UserRecord.objects.filter(username=username).delete() 
+    return JsonResponse({'message': 'Data deleted'}, status=200)
+
+
 def getLinesOfCode(request, username):
     ignore_dirs = set(request.GET.get('ignore_dirs', '').split(',')) if request.GET.get('ignore_dirs') else default_ignore_dirs
     ignore_extensions = set(request.GET.get('ignore_extensions', '').split(',')) if request.GET.get('ignore_extensions') else default_ignore_extensions
@@ -58,13 +64,15 @@ def getLinesOfCode(request, username):
             lines_of_code = 0
             lines_of_code_per_language = {}
 
+            loc = {}
             for repository in repositories:
                 try:
                     print(f"Processing repository {repository['name']}\n\n\n")
                     processed_repos += 1
                     yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
-                    
+       
                     if repository['size'] > MAX_REPOSITORY_SIZE:
+                        yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is too large\"}}\n\n"
                         yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
                         time.sleep(1)
                         continue
@@ -90,7 +98,7 @@ def getLinesOfCode(request, username):
             yield "event: message\ndata: Success\n\n"
             
         except CancelledError:
-            print("Connection reset by peer")
+            yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Connection reset by peer\"}}\n\n"
             return
         except Exception as e:
             yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"{str(e)}\"}}\n\n"
