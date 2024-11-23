@@ -6,12 +6,12 @@ default_ignore_dirs = {
 
     # Static/Media/Public Assets
     'static', 'media', 'assets', 'public', 'resources', 'upload', 'downloads', 
-    'images', 'fonts', 'icons', 'videos', 
+    'images', 'fonts', 'icons', 'videos',  'vendor',
 
     # Framework-Specific (Laravel, Django, React, Vue, etc.)
     'storage', 'bootstrap/cache', 'public/storage', 'migrations', 
     '.env_backup', 'compiled', '__generated__', 
-    '.vercel', '.parcel-cache', '.webpack-cache', '.storybook-static',
+    '.vercel', '.parcel-cache', '.webpack-cache', '.storybook-static', 'contrib',
     
     # Database/Temp
     'db_data', 'database', 'dump', 'backups', 

@@ -9,7 +9,7 @@ import time
 from asyncio.exceptions import CancelledError
 import os
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
-GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=5'
+GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=100'
 MAX_REPOSITORY_SIZE = 150000 # kilobytes
 
 def get_repo_info(username):
@@ -71,10 +71,11 @@ def getLinesOfCode(request, username):
                     processed_repos += 1
                     yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
        
-                    if repository['size'] > MAX_REPOSITORY_SIZE:
+       
+                    # Prevent empty or large repositories from being processed
+                    if repository['size'] > MAX_REPOSITORY_SIZE or repository['size'] == 0 or repository['fork'] == True:
                         yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is too large\"}}\n\n"
                         yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
-                        time.sleep(1)
                         continue
 
                     loc = RepoAnalyzer(username, repository['name'], ignore_dirs, ignore_extensions).analyze()

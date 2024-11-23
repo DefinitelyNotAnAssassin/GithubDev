@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 import tempfile
+from collections import Counter
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -20,6 +21,7 @@ class RepoAnalyzer:
         self.ignore_extensions = set(ignore_extensions) if ignore_extensions else set()
         self.clone_base_dir = tempfile.mkdtemp()
         self.clone_dir = self.clone_base_dir  # Will be updated after extraction
+        self.directory_counter = Counter()
         logging.info(f"Initialized RepoAnalyzer for {username}/{repo_name}")
 
     def get_default_branch(self):
@@ -101,6 +103,12 @@ class RepoAnalyzer:
                 if ext not in self.ignore_extensions:
                     file_path = os.path.join(root, file)
                     files_to_process.append((file_path, ext))
+            # Update directory counter
+            self.directory_counter.update(dirs)
+
+        if not files_to_process:
+            logging.info("No files to process in the repository.")
+            return lines_of_code, comment_lines, blank_lines, lines_of_code_per_language
 
         def process_and_collect(args):
             file_path, ext = args
@@ -124,10 +132,25 @@ class RepoAnalyzer:
         logging.info(f"Finished processing files. Total LOC: {lines_of_code}, Comments: {comment_lines}, Blanks: {blank_lines}")
         return lines_of_code, comment_lines, blank_lines, lines_of_code_per_language
 
+    def log_common_directories(self):
+        try:
+            log_dir = os.path.join(os.getcwd(), 'logs')
+            os.makedirs(log_dir, exist_ok=True)
+            log_file_path = os.path.join(log_dir, 'common_directories.log')
+            with open(log_file_path, 'a') as log_file:
+                log_file.write(f"Repository: {self.repo_name}\n")
+                for directory, count in self.directory_counter.most_common():
+                    log_file.write(f"{directory}: {count}\n")
+                log_file.write("\n")
+            logging.info(f"Logged common directories to {log_file_path}")
+        except Exception as e:
+            logging.error(f"Failed to log common directories: {e}")
+
     def analyze(self):
         try:
             self.download_and_extract_repo()
             loc, comments, blanks, loc_by_lang = self.count_lines_of_code()
+            self.log_common_directories()
         finally:
             shutil.rmtree(self.clone_base_dir, ignore_errors=True)
             logging.info(f"Cleaned up temporary directory {self.clone_base_dir}")
