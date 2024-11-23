@@ -6,3 +6,6 @@ libexpat1-dev
 gettext 
 libz-dev 
 libssl-dev
+libcurl
+libpcre2-dev
+zlib1g
