@@ -10,11 +10,10 @@ import asyncio
 import aiohttp
 import os
 from concurrent.futures import ThreadPoolExecutor
-from asgiref.sync import sync_to_async
-
+from asgiref.sync import async_to_sync
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
-GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=100'
-MAX_REPOSITORY_SIZE = 150000 # kilobytes
+GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=2'
+MAX_REPOSITORY_SIZE = 150000  # kilobytes
 executor = ThreadPoolExecutor(max_workers=5)
 
 async def get_repo_info(username):
@@ -22,7 +21,6 @@ async def get_repo_info(username):
     async with aiohttp.ClientSession() as session:
         async with session.get(GITHUB_API_URL.format(username=username), headers=headers) as response:
             return await response.json()
-
 
 def getExtensions(request):
     return JsonResponse({
@@ -45,11 +43,9 @@ def getLeaderboard(request):
     
     return JsonResponse({'users': users_list, 'count': count}, status=200)
 
-
 def refreshAccountData(request, username):
     UserRecord.objects.filter(username__iexact=username).delete() 
     return JsonResponse({'message': 'Data deleted'}, status=200)
-
 
 def getLinesOfCode(request, username):
     ignore_dirs = set(request.GET.get('ignore_dirs', '').split(',')) if request.GET.get('ignore_dirs') else default_ignore_dirs
@@ -59,62 +55,59 @@ def getLinesOfCode(request, username):
     print("IGNORE EXTENSIONS", ignore_extensions)
 
     def stream_response():
-        try:
-            user_record = UserRecord.objects.filter(username__iexact=username).first()
-            if user_record:
-                yield f"event: message\ndata: {json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': user_record.lines_of_code_per_language})}\n\n"
-                yield "event: message\ndata: Success\n\n"
-                return
-
-            repositories = asyncio.run(get_repo_info(username))
-            total_repos = len(repositories)
-            processed_repos = 0
-            lines_of_code = 0
-            lines_of_code_per_language = {}
-
-            for repository in repositories:
-                try:
-                    print(f"Processing repository {repository['name']}\n\n\n")
-                    processed_repos += 1
-                    yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
-
-                    if repository['size'] > MAX_REPOSITORY_SIZE:
-                        yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is too large\"}}\n\n"
-                        continue
-                    elif repository['size'] == 0:
-                        yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is empty\"}}\n\n"
-                        continue
-                    elif repository['fork']:
-                        yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is a fork\"}}\n\n"
-                        continue
-
-                    analyzer = RepoAnalyzer(username, repository['name'], ignore_dirs, ignore_extensions)
-                    loc = asyncio.run(sync_to_async(analyzer.analyze, thread_sensitive=True)())
-                    lines_of_code += loc.get('loc', 0)
-
-                    for lang, count in loc.get('locByLangs', {}).items():
-                        lines_of_code_per_language[lang] = lines_of_code_per_language.get(lang, 0) + count
-
-                except asyncio.CancelledError:
-                    print("Connection reset by peer")
+            try:
+                user_record = UserRecord.objects.filter(username__iexact=username).first()
+                if user_record:
+                    yield f"event: message\ndata: {json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': user_record.lines_of_code_per_language})}\n\n"
+                    yield "event: message\ndata: Success\n\n"
                     return
 
-            user_record = UserRecord(
-                username=username,
-                lines_of_code=lines_of_code,
-                lines_of_code_per_language=lines_of_code_per_language,
-                repositories=json.dumps(repositories)
-            )
-            user_record.save()
+                repositories = async_to_sync(get_repo_info)(username)
+                total_repos = len(repositories)
+                processed_repos = 0
+                lines_of_code = 0
+                lines_of_code_per_language = {}
 
-            yield f"event: message\ndata: {json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': lines_of_code_per_language})}\n\n"
-            yield "event: message\ndata: Success\n\n"
+                for repository in repositories:
+                    try:
+                        processed_repos += 1
 
-        except asyncio.CancelledError:
-            yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Connection reset by peer\"}}\n\n"
-            return
-        except Exception as e:
-            yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"{str(e)}\"}}\n\n"
+                        if repository['size'] > MAX_REPOSITORY_SIZE:
+                            yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is too large\"}}\n\n"
+                            continue
+                        elif repository['size'] == 0:
+                            yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is empty\"}}\n\n"
+                            continue
+                        elif repository['fork']:
+                            yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is a fork\"}}\n\n"
+                            continue
+
+                        analyzer = RepoAnalyzer(username, repository['name'], ignore_dirs, ignore_extensions)
+                        loc = async_to_sync(analyzer.analyze)()
+                        lines_of_code += loc.get('loc', 0)
+
+                        for lang, count in loc.get('locByLangs', {}).items():
+                            lines_of_code_per_language[lang] = lines_of_code_per_language.get(lang, 0) + count
+
+                        yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
+
+                    except Exception as e:
+                        yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"{str(e)}\"}}\n\n"
+                        continue
+
+                user_record = UserRecord(
+                    username=username,
+                    lines_of_code=lines_of_code,
+                    lines_of_code_per_language=lines_of_code_per_language,
+                    repositories=json.dumps(repositories)
+                )
+                user_record.save()
+
+                yield f"event: message\ndata: {json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': lines_of_code_per_language})}\n\n"
+                yield "event: message\ndata: Success\n\n"
+
+            except Exception as e:
+                yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"{str(e)}\"}}\n\n"
 
     response = StreamingHttpResponse(stream_response(), content_type='text/event-stream')
     response['Cache-Control'] = 'no-cache'

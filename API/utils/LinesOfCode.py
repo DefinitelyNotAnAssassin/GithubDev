@@ -1,13 +1,14 @@
 import os
 import shutil
-import requests
-import io
+import aiohttp
+import aiofiles
+import asyncio
 import zipfile
 import logging
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor
-import tempfile
 from collections import Counter
+import tempfile
+import io
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -24,25 +25,26 @@ class RepoAnalyzer:
         self.directory_counter = Counter()
         logging.info(f"Initialized RepoAnalyzer for {username}/{repo_name}")
 
-    def get_default_branch(self):
+    async def get_default_branch(self):
         api_url = f"https://api.github.com/repos/{self.username}/{self.repo_name}"
         headers = {}
         token = os.getenv('GITHUB_TOKEN')
         if token:
             headers['Authorization'] = f'token {token}'
-        response = requests.get(api_url, headers=headers)
-        if response.status_code == 200:
-            repo_info = response.json()
-            default_branch = repo_info.get('default_branch', 'master')
-            logging.info(f"Default branch for {self.username}/{self.repo_name} is {default_branch}")
-            return default_branch
-        else:
-            error_message = f"Failed to get repository info: {response.status_code}"
-            logging.error(error_message)
-            raise Exception(error_message)
+        async with aiohttp.ClientSession() as session:
+            async with session.get(api_url, headers=headers) as response:
+                if response.status == 200:
+                    repo_info = await response.json()
+                    default_branch = repo_info.get('default_branch', 'master')
+                    logging.info(f"Default branch for {self.username}/{self.repo_name} is {default_branch}")
+                    return default_branch
+                else:
+                    error_message = f"Failed to get repository info: {response.status}"
+                    logging.error(error_message)
+                    raise Exception(error_message)
 
-    def download_and_extract_repo(self):
-        default_branch = self.get_default_branch()
+    async def download_and_extract_repo(self):
+        default_branch = await self.get_default_branch()
         repo_url = self.repo_url_template.format(
             username=self.username,
             repo_name=self.repo_name,
@@ -55,27 +57,29 @@ class RepoAnalyzer:
             headers['Authorization'] = f'token {token}'
 
         logging.info(f"Downloading repository {self.username}/{self.repo_name} from {repo_url}")
-        response = requests.get(repo_url, headers=headers, stream=True)
-        if response.status_code == 200:
-            with zipfile.ZipFile(io.BytesIO(response.content)) as zip_ref:
-                zip_ref.extractall(self.clone_base_dir)
-            extracted_folder_name = f"{self.repo_name}-{default_branch}"
-            self.clone_dir = os.path.join(self.clone_base_dir, extracted_folder_name)
-            logging.info(f"Extracted repository to {self.clone_dir}")
-        else:
-            error_message = f"Failed to download repository: {response.status_code}"
-            logging.error(error_message)
-            raise Exception(error_message)
+        async with aiohttp.ClientSession() as session:
+            async with session.get(repo_url, headers=headers) as response:
+                if response.status == 200:
+                    content = await response.read()
+                    with zipfile.ZipFile(io.BytesIO(content)) as zip_ref:
+                        zip_ref.extractall(self.clone_base_dir)
+                    extracted_folder_name = f"{self.repo_name}-{default_branch}"
+                    self.clone_dir = os.path.join(self.clone_base_dir, extracted_folder_name)
+                    logging.info(f"Extracted repository to {self.clone_dir}")
+                else:
+                    error_message = f"Failed to download repository: {response.status}"
+                    logging.error(error_message)
+                    raise Exception(error_message)
 
     @staticmethod
-    def process_file(file_path):
+    async def process_file(file_path):
         lines_of_code = 0
         comment_lines = 0
         blank_lines = 0
 
         try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                for line in f:
+            async with aiofiles.open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                async for line in f:
                     stripped_line = line.strip()
                     if not stripped_line:
                         blank_lines += 1
@@ -89,7 +93,7 @@ class RepoAnalyzer:
 
         return lines_of_code, comment_lines, blank_lines
 
-    def count_lines_of_code(self):
+    async def count_lines_of_code(self):
         lines_of_code = 0
         comment_lines = 0
         blank_lines = 0
@@ -110,14 +114,13 @@ class RepoAnalyzer:
             logging.info("No files to process in the repository.")
             return lines_of_code, comment_lines, blank_lines, lines_of_code_per_language
 
-        def process_and_collect(args):
-            file_path, ext = args
-            loc, comments, blanks = self.process_file(file_path)
+        async def process_and_collect(file_path, ext):
+            loc, comments, blanks = await self.process_file(file_path)
             return loc, comments, blanks, ext
 
         logging.info(f"Starting to process {len(files_to_process)} files")
-        with ThreadPoolExecutor(max_workers=os.cpu_count() * 5) as executor:
-            results = executor.map(process_and_collect, files_to_process)
+        tasks = [process_and_collect(file_path, ext) for file_path, ext in files_to_process]
+        results = await asyncio.gather(*tasks)
 
         for loc, comments, blanks, ext in results:
             lines_of_code += loc
@@ -132,25 +135,25 @@ class RepoAnalyzer:
         logging.info(f"Finished processing files. Total LOC: {lines_of_code}, Comments: {comment_lines}, Blanks: {blank_lines}")
         return lines_of_code, comment_lines, blank_lines, lines_of_code_per_language
 
-    def log_common_directories(self):
+    async def log_common_directories(self):
         try:
             log_dir = os.path.join(os.getcwd(), 'logs')
             os.makedirs(log_dir, exist_ok=True)
             log_file_path = os.path.join(log_dir, 'common_directories.log')
-            with open(log_file_path, 'a') as log_file:
-                log_file.write(f"Repository: {self.repo_name}\n")
+            async with aiofiles.open(log_file_path, 'a') as log_file:
+                await log_file.write(f"Repository: {self.repo_name}\n")
                 for directory, count in self.directory_counter.most_common():
-                    log_file.write(f"{directory}: {count}\n")
-                log_file.write("\n")
+                    await log_file.write(f"{directory}: {count}\n")
+                await log_file.write("\n")
             logging.info(f"Logged common directories to {log_file_path}")
         except Exception as e:
             logging.error(f"Failed to log common directories: {e}")
 
-    def analyze(self):
+    async def analyze(self):
         try:
-            self.download_and_extract_repo()
-            loc, comments, blanks, loc_by_lang = self.count_lines_of_code()
-            self.log_common_directories()
+            await self.download_and_extract_repo()
+            loc, comments, blanks, loc_by_lang = await self.count_lines_of_code()
+            await self.log_common_directories()
         finally:
             shutil.rmtree(self.clone_base_dir, ignore_errors=True)
             logging.info(f"Cleaned up temporary directory {self.clone_base_dir}")
