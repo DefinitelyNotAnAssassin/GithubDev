@@ -71,6 +71,8 @@ def getLinesOfCode(request, username):
                 for repository in repositories:
                     try:
                         processed_repos += 1
+                        yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
+
 
                         if repository['size'] > MAX_REPOSITORY_SIZE:
                             yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is too large\"}}\n\n"
@@ -83,13 +85,12 @@ def getLinesOfCode(request, username):
                             continue
 
                         analyzer = RepoAnalyzer(username, repository['name'], ignore_dirs, ignore_extensions)
-                        loc = async_to_sync(analyzer.analyze)()
+                        loc = analyzer.analyze()
                         lines_of_code += loc.get('loc', 0)
 
                         for lang, count in loc.get('locByLangs', {}).items():
                             lines_of_code_per_language[lang] = lines_of_code_per_language.get(lang, 0) + count
 
-                        yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
 
                     except Exception as e:
                         yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"{str(e)}\"}}\n\n"

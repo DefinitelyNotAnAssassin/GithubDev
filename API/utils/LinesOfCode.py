@@ -149,11 +149,11 @@ class RepoAnalyzer:
         except Exception as e:
             logging.error(f"Failed to log common directories: {e}")
 
-    async def analyze(self):
+    def analyze(self):
         try:
-            await self.download_and_extract_repo()
-            loc, comments, blanks, loc_by_lang = await self.count_lines_of_code()
-            await self.log_common_directories()
+            self.download_and_extract_repo()
+            loc, comments, blanks, loc_by_lang = self.count_lines_of_code()
+            self.log_common_directories()
         finally:
             shutil.rmtree(self.clone_base_dir, ignore_errors=True)
             logging.info(f"Cleaned up temporary directory {self.clone_base_dir}")
