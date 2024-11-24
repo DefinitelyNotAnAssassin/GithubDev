@@ -3,6 +3,7 @@ import logging
 import os
 import requests
 from threading import Thread, Event
+from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from API.utils.LinesOfCode import RepoAnalyzer
 from Models.models import UserRecord
@@ -34,12 +35,13 @@ class LinesOfCodeConsumer(AsyncWebsocketConsumer):
         ignore_extensions = set(data.get('ignore_extensions', default_ignore_extensions))
         
         
-        isExisting = UserRecord.objects.filter(username=username).exists() 
-        if isExisting: 
-            user_record = UserRecord.objects.filter(username=username).first()
+
+        isExisting = await sync_to_async(UserRecord.objects.filter(username=username).exists)()
+        if isExisting:
+            user_record = await sync_to_async(UserRecord.objects.filter(username=username).first)()
             await self.send(text_data=json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': user_record.lines_of_code_per_language}))
             await self.send(text_data=json.dumps({'type': 'complete'}))
-            return 
+            return
         
 
         try:
