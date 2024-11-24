@@ -23,7 +23,7 @@ def getExtensions(request):
     return JsonResponse({
         'ignore_extensions': list(default_ignore_extensions),
         'ignore_dirs': list(default_ignore_dirs)
-}, status=200)
+    }, status=200)
 
 def getLeaderboard(request):
     page = int(request.GET.get('page', 1))
@@ -47,6 +47,11 @@ def refreshAccountData(request, username):
 
 
 def getLinesOfCode(request, username):
+    ignore_dirs = set(request.GET.get('ignore_dirs', '').split(',')) if request.GET.get('ignore_dirs') else default_ignore_dirs
+    ignore_extensions = set(request.GET.get('ignore_extensions', '').split(',')) if request.GET.get('ignore_extensions') else default_ignore_extensions
+
+    print("IGNORE DIRS", ignore_dirs)   
+    print("IGNORE EXTENSIONS", ignore_extensions)
     def stream_response():
         try:
             user_record = UserRecord.objects.filter(username__iexact=username).first()
@@ -68,11 +73,10 @@ def getLinesOfCode(request, username):
                     processed_repos += 1
                     yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
        
-       
-                    # Prevent empty or large repositories from being processed
-                    if repository['size'] > MAX_REPOSITORY_SIZE or repository['size'] == 0 or repository['fork'] == True:
+                    if repository['size'] > MAX_REPOSITORY_SIZE or repository['size'] == 0 or repository['fork']:
                         yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is too large\"}}\n\n"
                         yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
+                        time.sleep(1)
                         continue
 
                     loc = RepoAnalyzer(username, repository['name'], ignore_dirs, ignore_extensions).analyze()
@@ -93,9 +97,10 @@ def getLinesOfCode(request, username):
             )
             user_record.save()
             yield f"event: message\ndata: {json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': lines_of_code_per_language})}\n\n"
-            yield f"event: message\ndata: {json.dumps({'type': 'complete'})} \n\n"
+            yield "event: message\ndata: Success\n\n"
             
         except CancelledError:
+            yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Connection reset by peer\"}}\n\n"
             return
         except Exception as e:
             yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"{str(e)}\"}}\n\n"
