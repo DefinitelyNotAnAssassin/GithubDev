@@ -2,7 +2,6 @@ import json
 import logging
 import os
 import requests
-from threading import Thread, Event
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from API.utils.LinesOfCode import RepoAnalyzer
@@ -14,37 +13,43 @@ import aiohttp
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=100'
 MAX_REPOSITORY_SIZE = 150000  # kilobytes
+
 class LinesOfCodeConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.is_connected = True
         await self.accept()
         self.stop_event = asyncio.Event()
+        self.heartbeat_task = asyncio.create_task(self.heartbeat())
 
     async def disconnect(self, close_code):
         self.is_connected = False
         self.stop_event.set()
+        if self.heartbeat_task:
+            await self.heartbeat_task
         print("Disconnected")
         await self.close()
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-
+        if data.get('type') == "close":
+            await self.disconnect(None)
+            return
+        elif data.get('type') == "heartbeat_response":
+            self.stop_event.clear()  # Clear the stop event if a heartbeat response is received
+            return
 
         username = data.get('username')
         ignore_dirs = set(data.get('ignore_dirs', default_ignore_extensions))
         ignore_extensions = set(data.get('ignore_extensions', default_ignore_extensions))
-        
-        
-
-        isExisting = await sync_to_async(UserRecord.objects.filter(username=username).exists)()
-        if isExisting:
-            user_record = await sync_to_async(UserRecord.objects.filter(username=username).first)()
-            await self.send(text_data=json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': user_record.lines_of_code_per_language}))
-            await self.send(text_data=json.dumps({'type': 'complete'}))
-            return
-        
 
         try:
+            is_existing = await sync_to_async(UserRecord.objects.filter(username=username).exists)()
+            if is_existing:
+                user_record = await sync_to_async(UserRecord.objects.filter(username=username).first)()
+                await self.send(text_data=json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': user_record.lines_of_code_per_language}))
+                await self.send(text_data=json.dumps({'type': 'complete'}))
+                return
+
             repositories = await self.get_repo_info(username)
             total_repos = len(repositories)
             processed_repos = 0
@@ -52,7 +57,7 @@ class LinesOfCodeConsumer(AsyncWebsocketConsumer):
             lines_of_code_per_language = {}
 
             for repository in repositories:
-                if self.is_connected == False:
+                if not self.is_connected:
                     return
 
                 processed_repos += 1
@@ -65,13 +70,12 @@ class LinesOfCodeConsumer(AsyncWebsocketConsumer):
                 for lang, count in loc.get('locByLangs', {}).items():
                     lines_of_code_per_language[lang] = lines_of_code_per_language.get(lang, 0) + count
 
-            user_record = UserRecord(
+            user_record = await sync_to_async(UserRecord.objects.create)(
                 username=username,
                 lines_of_code=lines_of_code,
                 lines_of_code_per_language=lines_of_code_per_language,
                 repositories=json.dumps(repositories)
             )
-            await user_record.save()
             await self.send(text_data=json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': lines_of_code_per_language}))
             await self.send(text_data=json.dumps({'type': 'complete'}))
         except Exception as e:
@@ -84,7 +88,15 @@ class LinesOfCodeConsumer(AsyncWebsocketConsumer):
             async with session.get(GITHUB_API_URL.format(username=username), headers=headers) as response:
                 return await response.json()
 
-
+    async def heartbeat(self):
+        while self.is_connected:
+            await self.send(text_data=json.dumps({'type': 'heartbeat'}))
+            try:
+                await asyncio.wait_for(self.stop_event.wait(), timeout=10)
+            except asyncio.TimeoutError:
+                logging.info("No heartbeat response from client, closing connection")
+                await self.disconnect(None)
+                break
 
     async def send_progress(self, repository, processed_repos, total_repos):
         message = {
