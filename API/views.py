@@ -6,18 +6,23 @@ from API.constants.ExtensionFilters import default_ignore_extensions, default_ig
 import requests
 import json
 import time
-from asyncio.exceptions import CancelledError
+import asyncio
+import aiohttp
 import os
+from concurrent.futures import ThreadPoolExecutor
+from asgiref.sync import sync_to_async
+
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=100'
 MAX_REPOSITORY_SIZE = 150000 # kilobytes
+executor = ThreadPoolExecutor(max_workers=5)
 
-def get_repo_info(username):
+async def get_repo_info(username):
     headers = {'Authorization': f'token {GITHUB_TOKEN}'}
-    print(f"Getting repositories for {username}")
-    print(GITHUB_TOKEN)
-    response = requests.get(GITHUB_API_URL.format(username=username), headers=headers)
-    return response.json()
+    async with aiohttp.ClientSession() as session:
+        async with session.get(GITHUB_API_URL.format(username=username), headers=headers) as response:
+            return await response.json()
+
 
 def getExtensions(request):
     return JsonResponse({
@@ -50,8 +55,9 @@ def getLinesOfCode(request, username):
     ignore_dirs = set(request.GET.get('ignore_dirs', '').split(',')) if request.GET.get('ignore_dirs') else default_ignore_dirs
     ignore_extensions = set(request.GET.get('ignore_extensions', '').split(',')) if request.GET.get('ignore_extensions') else default_ignore_extensions
 
-    print("IGNORE DIRS", ignore_dirs)   
+    print("IGNORE DIRS", ignore_dirs)
     print("IGNORE EXTENSIONS", ignore_extensions)
+
     def stream_response():
         try:
             user_record = UserRecord.objects.filter(username__iexact=username).first()
@@ -60,32 +66,36 @@ def getLinesOfCode(request, username):
                 yield "event: message\ndata: Success\n\n"
                 return
 
-            repositories = get_repo_info(username)
+            repositories = asyncio.run(get_repo_info(username))
             total_repos = len(repositories)
             processed_repos = 0
             lines_of_code = 0
             lines_of_code_per_language = {}
 
-            loc = {}
             for repository in repositories:
                 try:
                     print(f"Processing repository {repository['name']}\n\n\n")
                     processed_repos += 1
                     yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
-       
-                    if repository['size'] > MAX_REPOSITORY_SIZE or repository['size'] == 0 or repository['fork']:
+
+                    if repository['size'] > MAX_REPOSITORY_SIZE:
                         yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is too large\"}}\n\n"
-                        yield f"event: message\ndata: {{\"type\": \"progress\", \"repo\": \"{repository['name']}\", \"processedRepos\": {processed_repos}, \"totalRepos\": {total_repos}}}\n\n"
-                        time.sleep(1)
+                        continue
+                    elif repository['size'] == 0:
+                        yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is empty\"}}\n\n"
+                        continue
+                    elif repository['fork']:
+                        yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Repository {repository['name']} is a fork\"}}\n\n"
                         continue
 
-                    loc = RepoAnalyzer(username, repository['name'], ignore_dirs, ignore_extensions).analyze()
+                    analyzer = RepoAnalyzer(username, repository['name'], ignore_dirs, ignore_extensions)
+                    loc = asyncio.run(sync_to_async(analyzer.analyze, thread_sensitive=True)())
                     lines_of_code += loc.get('loc', 0)
 
                     for lang, count in loc.get('locByLangs', {}).items():
                         lines_of_code_per_language[lang] = lines_of_code_per_language.get(lang, 0) + count
 
-                except CancelledError:
+                except asyncio.CancelledError:
                     print("Connection reset by peer")
                     return
 
@@ -96,10 +106,11 @@ def getLinesOfCode(request, username):
                 repositories=json.dumps(repositories)
             )
             user_record.save()
+
             yield f"event: message\ndata: {json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': lines_of_code_per_language})}\n\n"
             yield "event: message\ndata: Success\n\n"
-            
-        except CancelledError:
+
+        except asyncio.CancelledError:
             yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Connection reset by peer\"}}\n\n"
             return
         except Exception as e:
