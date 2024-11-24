@@ -12,7 +12,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from asgiref.sync import async_to_sync
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
-GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=2'
+GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=100'
 MAX_REPOSITORY_SIZE = 150000  # kilobytes
 executor = ThreadPoolExecutor(max_workers=5)
 
