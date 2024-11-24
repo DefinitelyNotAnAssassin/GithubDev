@@ -18,25 +18,15 @@ class LinesOfCodeConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.is_connected = True
         await self.accept()
-        self.stop_event = asyncio.Event()
-        self.heartbeat_task = asyncio.create_task(self.heartbeat())
 
     async def disconnect(self, close_code):
         self.is_connected = False
-        self.stop_event.set()
-        if self.heartbeat_task:
-            await self.heartbeat_task
         print("Disconnected")
         await self.close()
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        if data.get('type') == "close":
-            await self.disconnect(None)
-            return
-        elif data.get('type') == "heartbeat_response":
-            self.stop_event.clear()  # Clear the stop event if a heartbeat response is received
-            return
+ 
 
         username = data.get('username')
         ignore_dirs = set(data.get('ignore_dirs', default_ignore_extensions))
@@ -88,15 +78,7 @@ class LinesOfCodeConsumer(AsyncWebsocketConsumer):
             async with session.get(GITHUB_API_URL.format(username=username), headers=headers) as response:
                 return await response.json()
 
-    async def heartbeat(self):
-        while self.is_connected:
-            await self.send(text_data=json.dumps({'type': 'heartbeat'}))
-            try:
-                await asyncio.wait_for(self.stop_event.wait(), timeout=10)
-            except asyncio.TimeoutError:
-                logging.info("No heartbeat response from client, closing connection")
-                await self.disconnect(None)
-                break
+
 
     async def send_progress(self, repository, processed_repos, total_repos):
         message = {
