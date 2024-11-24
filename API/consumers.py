@@ -12,7 +12,7 @@ import json
 import asyncio
 
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
-GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=10'
+GITHUB_API_URL = 'https://api.github.com/users/{username}/repos?per_page=100'
 MAX_REPOSITORY_SIZE = 150000  # kilobytes
 
 class LinesOfCodeConsumer(AsyncWebsocketConsumer):
