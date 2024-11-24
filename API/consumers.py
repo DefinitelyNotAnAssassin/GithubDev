@@ -32,6 +32,15 @@ class LinesOfCodeConsumer(AsyncWebsocketConsumer):
         username = data.get('username')
         ignore_dirs = set(data.get('ignore_dirs', default_ignore_extensions))
         ignore_extensions = set(data.get('ignore_extensions', default_ignore_extensions))
+        
+        
+        isExisting = UserRecord.objects.filter(username=username).exists() 
+        if isExisting: 
+            user_record = UserRecord.objects.filter(username=username).first()
+            await self.send(text_data=json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': user_record.lines_of_code_per_language}))
+            await self.send(text_data=json.dumps({'type': 'complete'}))
+            return 
+        
 
         try:
             repositories = await self.get_repo_info(username)
