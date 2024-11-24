@@ -46,10 +46,6 @@ def refreshAccountData(request, username):
     return JsonResponse({'message': 'Data deleted'}, status=200)
 
 
-def getLinesOfCode(request, username):
-    ignore_dirs = set(request.GET.get('ignore_dirs', '').split(',')) if request.GET.get('ignore_dirs') else default_ignore_dirs
-    ignore_extensions = set(request.GET.get('ignore_extensions', '').split(',')) if request.GET.get('ignore_extensions') else default_ignore_extensions
-
     def stream_response():
         try:
             user_record = UserRecord.objects.filter(username=username).first()
@@ -96,10 +92,9 @@ def getLinesOfCode(request, username):
             )
             user_record.save()
             yield f"event: message\ndata: {json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': lines_of_code_per_language})}\n\n"
-            yield "event: message\ndata: Success\n\n"
+            yield f"event: message\ndata: {json.dumps({'type': 'complete'})} \n\n"
             
         except CancelledError:
-            yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"Connection reset by peer\"}}\n\n"
             return
         except Exception as e:
             yield f"event: message\ndata: {{\"type\": \"error\", \"message\": \"{str(e)}\"}}\n\n"

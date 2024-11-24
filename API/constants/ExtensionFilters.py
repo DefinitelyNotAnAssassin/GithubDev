@@ -2,7 +2,7 @@ default_ignore_dirs = {
     'node_modules', 'dist', 'build', '.git', '.svn', '.hg', '.idea', '.vscode', 
     '__pycache__', '.DS_Store', 'venv', 'env', '.next', '.nuxt', 'target', 
     '.terraform', '.gradle', 'logs', 'temp', 'tmp', 'out', '.pytest_cache', 
-    'coverage', '.cache', '.expo', 
+    'coverage', '.cache', '.expo', 'docs'
 
     # Static/Media/Public Assets
     'static', 'media', 'assets', 'public', 'resources', 'upload', 'downloads', 
