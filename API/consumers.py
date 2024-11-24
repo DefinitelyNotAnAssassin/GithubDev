@@ -71,7 +71,7 @@ class LinesOfCodeConsumer(AsyncWebsocketConsumer):
                 lines_of_code_per_language=lines_of_code_per_language,
                 repositories=json.dumps(repositories)
             )
-            user_record.save()
+            await user_record.save()
             await self.send(text_data=json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': lines_of_code_per_language}))
             await self.send(text_data=json.dumps({'type': 'complete'}))
         except Exception as e:
