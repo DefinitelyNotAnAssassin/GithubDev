@@ -8,6 +8,7 @@ from API.consumers import LinesOfCodeConsumer
 
 # Set the default Django settings module
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+django.setup()
 django_asgi_app = get_asgi_application()
 
 

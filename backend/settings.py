@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from corsheaders.defaults import default_headers
+import os
 import environ
+
 
 
 env = environ.Env()
@@ -51,6 +53,26 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
+
+CHANNEL_LAYERS = {
+    "default": {    
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": { 
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+            }
+    },  
+}
+
+CACHES  = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get('REDIS_URL', 'redis://localhost:6379'),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+
 
 ASGI_APPLICATION = "backend.asgi.application"
 
