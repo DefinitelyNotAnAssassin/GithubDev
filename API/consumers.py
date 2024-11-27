@@ -33,9 +33,9 @@ class LinesOfCodeConsumer(AsyncWebsocketConsumer):
         ignore_extensions = set(data.get('ignore_extensions', default_ignore_extensions))
 
         try:
-            is_existing = await sync_to_async(UserRecord.objects.filter(username=username).exists)()
+            is_existing = await sync_to_async(UserRecord.objects.filter(username__iexact=username).exists)()
             if is_existing:
-                user_record = await sync_to_async(UserRecord.objects.filter(username=username).first)()
+                user_record = await sync_to_async(UserRecord.objects.filter(username__iexact=username).first)()
                 await self.send(text_data=json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': user_record.lines_of_code_per_language}))
                 await self.send(text_data=json.dumps({'type': 'complete'}))
                 return

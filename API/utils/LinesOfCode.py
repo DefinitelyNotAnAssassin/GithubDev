@@ -26,7 +26,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class RepoAnalyzer:
-    # Define comment patterns as a class-level dictionary
     COMMENT_PATTERNS = {
         'python': re.compile(r'^\s*#'),
         'javascript': re.compile(r'^\s*(//|/\*|\*/)'),
