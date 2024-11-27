@@ -59,7 +59,7 @@ CHANNEL_LAYERS = {
     "default": {    
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": { 
-            "hosts": [os.environ.get('REDISCLOUD_URL', 'redis://localhost:6379')],
+            "hosts": [os.environ.get('REDISCLOUD_URL', 'redis://default:4Xy0T8VenYybkLxTOwtSC9r9F5bnkGHc@redis-13624.c85.us-east-1-2.ec2.redns.redis-cloud.com:13624')],
             }
     },  
 }
@@ -67,7 +67,7 @@ CHANNEL_LAYERS = {
 CACHES  = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.environ.get('REDISCLOUD_URL', 'redis://localhost:6379'),
+        "LOCATION": os.environ.get('REDISCLOUD_URL', 'redis://default:4Xy0T8VenYybkLxTOwtSC9r9F5bnkGHc@redis-13624.c85.us-east-1-2.ec2.redns.redis-cloud.com:13624'),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
