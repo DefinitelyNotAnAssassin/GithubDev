@@ -38679,3 +38679,245 @@ File Types:
 .db: 1
 .js: 1
 
+Repository: Activity1
+Common Directories:
+
+
+File Types:
+.html: 1
+
+Repository: Activity1
+Common Directories:
+
+
+File Types:
+.html: 1
+
+Repository: Air-Hockey
+Common Directories:
+client: 1
+src: 1
+static: 1
+helper: 1
+css: 1
+js: 1
+
+
+File Types:
+.js: 10
+.html: 4
+: 2
+.json: 2
+.css: 2
+.log: 1
+
+Repository: Air-Hockey
+Common Directories:
+client: 1
+src: 1
+static: 1
+helper: 1
+css: 1
+js: 1
+
+
+File Types:
+.js: 10
+.html: 4
+: 2
+.json: 2
+.css: 2
+.log: 1
+
+Repository: Alegra
+Common Directories:
+admin: 1
+db: 1
+certificates: 1
+class: 1
+clndr: 1
+dashboard_reports: 1
+forms: 1
+generate: 1
+project_img: 1
+report_img: 1
+
+
+File Types:
+.php: 73
+.jpg: 39
+.png: 5
+.docx: 4
+.txt: 3
+.js: 3
+.JPG: 3
+.sql: 2
+.rtf: 1
+.json: 1
+
+Repository: Alegra
+Common Directories:
+admin: 1
+db: 1
+certificates: 1
+class: 1
+clndr: 1
+dashboard_reports: 1
+forms: 1
+generate: 1
+project_img: 1
+report_img: 1
+
+
+File Types:
+.php: 73
+.jpg: 39
+.png: 5
+.docx: 4
+.txt: 3
+.js: 3
+.JPG: 3
+.sql: 2
+.rtf: 1
+.json: 1
+
+Repository: AlmaMemento
+Common Directories:
+src: 1
+components: 1
+composables: 1
+emailsender: 1
+firebase: 1
+router: 1
+Utils: 1
+views: 1
+templates: 1
+admin-components: 1
+
+
+File Types:
+.vue: 61
+.js: 7
+.json: 3
+: 1
+.html: 1
+.md: 1
+
+Repository: AlmaMemento
+Common Directories:
+src: 1
+components: 1
+composables: 1
+emailsender: 1
+firebase: 1
+router: 1
+Utils: 1
+views: 1
+templates: 1
+admin-components: 1
+
+
+File Types:
+.vue: 61
+.js: 7
+.json: 3
+: 1
+.html: 1
+.md: 1
+
+Repository: Bacoor_Exploration_Map
+Common Directories:
+BacoorMap: 1
+map: 1
+static: 1
+templates: 1
+
+
+File Types:
+.py: 13
+.geojson: 2
+.toml: 1
+.sqlite3: 1
+.md: 1
+.txt: 1
+.html: 1
+
+Repository: Bacoor_Exploration_Map
+Common Directories:
+BacoorMap: 1
+map: 1
+static: 1
+templates: 1
+
+
+File Types:
+.py: 13
+.geojson: 2
+.toml: 1
+.sqlite3: 1
+.md: 1
+.txt: 1
+.html: 1
+
+Repository: Bank-GUI
+Common Directories:
+
+
+File Types:
+.java: 4
+
+Repository: Bank-GUI
+Common Directories:
+
+
+File Types:
+.java: 4
+
+Repository: BetaPCParts
+Common Directories:
+app: 1
+bootstrap: 1
+config: 1
+lang: 1
+routes: 1
+tests: 1
+Console: 1
+Exceptions: 1
+Http: 1
+Models: 1
+
+
+File Types:
+.php: 99
+: 5
+.json: 3
+.yml: 1
+.lock: 1
+.xml: 1
+.md: 1
+.js: 1
+
+Repository: BetaPCParts
+Common Directories:
+app: 1
+bootstrap: 1
+config: 1
+lang: 1
+routes: 1
+tests: 1
+Console: 1
+Exceptions: 1
+Http: 1
+Models: 1
+
+
+File Types:
+.php: 99
+: 5
+.json: 3
+.yml: 1
+.lock: 1
+.xml: 1
+.md: 1
+.js: 1
+

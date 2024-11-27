@@ -2814,3 +2814,147 @@ Traceback (most recent call last):
   File "C:\Users\Winmri\AppData\Local\Programs\Python\Python39\lib\concurrent\futures\thread.py", line 167, in submit
     raise RuntimeError('cannot schedule new futures after shutdown')
 RuntimeError: cannot schedule new futures after shutdown
+2024-11-28 05:05:42,902 - daphne.server - INFO - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2024-11-28 05:05:42,903 - daphne.server - INFO - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2024-11-28 05:05:42,904 - daphne.server - INFO - Listening on TCP address 127.0.0.1:8000
+2024-11-28 05:05:44,567 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65229]
+2024-11-28 05:05:44,593 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65229]
+2024-11-28 05:05:44,622 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65231]
+2024-11-28 05:05:44,628 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65231]
+2024-11-28 05:05:45,437 - API.utils.LinesOfCode - INFO - Starting analysis for repository: Activity1
+2024-11-28 05:05:45,440 - API.utils.LinesOfCode - INFO - Starting analysis for repository: Activity1
+2024-11-28 05:05:46,536 - API.utils.LinesOfCode - INFO - Repository Activity1 downloaded and extracted successfully
+2024-11-28 05:05:46,536 - API.utils.LinesOfCode - INFO - Repository Activity1 downloaded and extracted successfully
+2024-11-28 05:05:47,095 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for Activity1
+2024-11-28 05:05:47,096 - API.utils.LinesOfCode - INFO - Analysis completed in 1.65 seconds
+2024-11-28 05:05:47,100 - API.utils.LinesOfCode - INFO - Starting analysis for repository: Air-Hockey
+2024-11-28 05:05:47,102 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for Activity1
+2024-11-28 05:05:47,104 - API.utils.LinesOfCode - INFO - Analysis completed in 1.67 seconds
+2024-11-28 05:05:47,111 - API.utils.LinesOfCode - INFO - Starting analysis for repository: Air-Hockey
+2024-11-28 05:05:48,315 - API.utils.LinesOfCode - INFO - Repository Air-Hockey downloaded and extracted successfully
+2024-11-28 05:05:48,315 - API.utils.LinesOfCode - INFO - Repository Air-Hockey downloaded and extracted successfully
+2024-11-28 05:05:51,035 - API.utils.LinesOfCode - ERROR - Error processing file C:\Users\Winmri\AppData\Local\Temp\tmp2z7q39d6\Air-Hockey-master\src\helper\GameHelper.js: cannot mmap an empty file
+2024-11-28 05:05:51,054 - API.utils.LinesOfCode - ERROR - Error processing file C:\Users\Winmri\AppData\Local\Temp\tmp2z7q39d6\Air-Hockey-master\static\css\game.css: cannot mmap an empty file
+2024-11-28 05:05:51,092 - API.utils.LinesOfCode - ERROR - Error processing file C:\Users\Winmri\AppData\Local\Temp\tmpvzwib0n9\Air-Hockey-master\src\helper\GameHelper.js: cannot mmap an empty file
+2024-11-28 05:05:51,100 - API.utils.LinesOfCode - ERROR - Error processing file C:\Users\Winmri\AppData\Local\Temp\tmpvzwib0n9\Air-Hockey-master\static\css\game.css: cannot mmap an empty file
+2024-11-28 05:05:51,640 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for Air-Hockey
+2024-11-28 05:05:51,642 - API.utils.LinesOfCode - INFO - Analysis completed in 4.53 seconds
+2024-11-28 05:05:51,653 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for Air-Hockey
+2024-11-28 05:05:51,654 - API.utils.LinesOfCode - INFO - Analysis completed in 4.55 seconds
+2024-11-28 05:05:51,663 - API.utils.LinesOfCode - INFO - Starting analysis for repository: Alegra
+2024-11-28 05:05:51,687 - API.utils.LinesOfCode - INFO - Starting analysis for repository: Alegra
+2024-11-28 05:05:52,672 - django.channels.server - INFO - [32mHTTP GET /admin/ 302 [0.05, 127.0.0.1:65267][0m
+2024-11-28 05:05:52,805 - django.channels.server - INFO - [mHTTP GET /admin/login/?next=/admin/ 200 [0.13, 127.0.0.1:65267][0m
+2024-11-28 05:05:54,736 - django.channels.server - INFO - [mHTTP GET /static/admin/css/nav_sidebar.css 200 [1.88, 127.0.0.1:65269][0m
+2024-11-28 05:05:54,745 - django.channels.server - INFO - [mHTTP GET /static/admin/css/dark_mode.css 200 [1.89, 127.0.0.1:65268][0m
+2024-11-28 05:05:54,747 - django.channels.server - INFO - [mHTTP GET /static/admin/css/base.css 200 [1.90, 127.0.0.1:65267][0m
+2024-11-28 05:05:54,754 - django.channels.server - INFO - [mHTTP GET /static/admin/css/login.css 200 [1.90, 127.0.0.1:65270][0m
+2024-11-28 05:05:54,755 - django.channels.server - INFO - [mHTTP GET /static/admin/css/responsive.css 200 [1.90, 127.0.0.1:65271][0m
+2024-11-28 05:05:54,763 - django.channels.server - INFO - [mHTTP GET /static/admin/js/theme.js 200 [1.90, 127.0.0.1:65272][0m
+2024-11-28 05:05:54,768 - django.channels.server - INFO - [mHTTP GET /static/admin/js/nav_sidebar.js 200 [0.03, 127.0.0.1:65269][0m
+2024-11-28 05:05:58,543 - django.channels.server - INFO - [mHTTP POST /admin/login/?next=/admin/ 200 [0.57, 127.0.0.1:65269][0m
+2024-11-28 05:06:02,631 - API.utils.LinesOfCode - INFO - Repository Alegra downloaded and extracted successfully
+2024-11-28 05:06:03,587 - API.utils.LinesOfCode - INFO - Repository Alegra downloaded and extracted successfully
+2024-11-28 05:06:04,084 - django.channels.server - INFO - [32mHTTP POST /admin/login/?next=/admin/ 302 [1.44, 127.0.0.1:65269][0m
+2024-11-28 05:06:04,180 - django.channels.server - INFO - [mHTTP GET /admin/ 200 [0.06, 127.0.0.1:65269][0m
+2024-11-28 05:06:04,220 - django.channels.server - INFO - [mHTTP GET /static/admin/css/dashboard.css 200 [0.02, 127.0.0.1:65269][0m
+2024-11-28 05:06:04,303 - django.channels.server - INFO - [mHTTP GET /static/admin/img/icon-addlink.svg 200 [0.08, 127.0.0.1:65269][0m
+2024-11-28 05:06:04,320 - django.channels.server - INFO - [mHTTP GET /static/admin/img/icon-changelink.svg 200 [0.07, 127.0.0.1:65272][0m
+2024-11-28 05:06:04,323 - django.channels.server - INFO - [mHTTP GET /static/admin/img/icon-deletelink.svg 200 [0.07, 127.0.0.1:65271][0m
+2024-11-28 05:06:05,563 - django.channels.server - INFO - [mHTTP GET /admin/Models/userrecord/ 200 [0.14, 127.0.0.1:65271][0m
+2024-11-28 05:06:05,784 - django.channels.server - INFO - [mHTTP GET /static/admin/css/changelists.css 200 [0.18, 127.0.0.1:65271][0m
+2024-11-28 05:06:05,795 - django.channels.server - INFO - [mHTTP GET /static/admin/js/core.js 200 [0.17, 127.0.0.1:65267][0m
+2024-11-28 05:06:05,797 - django.channels.server - INFO - [mHTTP GET /static/admin/js/admin/RelatedObjectLookups.js 200 [0.17, 127.0.0.1:65268][0m
+2024-11-28 05:06:05,799 - django.channels.server - INFO - [mHTTP GET /static/admin/js/jquery.init.js 200 [0.17, 127.0.0.1:65270][0m
+2024-11-28 05:06:05,803 - django.channels.server - INFO - [mHTTP GET /static/admin/js/vendor/jquery/jquery.js 200 [0.18, 127.0.0.1:65269][0m
+2024-11-28 05:06:06,013 - django.channels.server - INFO - [mHTTP GET /static/admin/js/actions.js 200 [0.19, 127.0.0.1:65271][0m
+2024-11-28 05:06:06,033 - django.channels.server - INFO - [mHTTP GET /admin/jsi18n/ 200 [0.42, 127.0.0.1:65272][0m
+2024-11-28 05:06:06,037 - django.channels.server - INFO - [mHTTP GET /static/admin/js/prepopulate.js 200 [0.16, 127.0.0.1:65270][0m
+2024-11-28 05:06:06,039 - django.channels.server - INFO - [mHTTP GET /static/admin/js/urlify.js 200 [0.16, 127.0.0.1:65268][0m
+2024-11-28 05:06:06,040 - django.channels.server - INFO - [mHTTP GET /static/admin/js/vendor/xregexp/xregexp.js 200 [0.16, 127.0.0.1:65267][0m
+2024-11-28 05:06:06,160 - django.channels.server - INFO - [mHTTP GET /static/admin/js/filters.js 200 [0.09, 127.0.0.1:65267][0m
+2024-11-28 05:06:06,172 - django.channels.server - INFO - [mHTTP GET /static/admin/img/tooltag-add.svg 200 [0.06, 127.0.0.1:65268][0m
+2024-11-28 05:06:06,626 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for Alegra
+2024-11-28 05:06:06,626 - API.utils.LinesOfCode - INFO - Analysis completed in 14.95 seconds
+2024-11-28 05:06:07,645 - django.channels.server - INFO - [mHTTP GET /admin/Models/userrecord/166/change/ 200 [0.19, 127.0.0.1:65268][0m
+2024-11-28 05:06:07,855 - django.channels.server - INFO - [mHTTP GET /static/admin/css/forms.css 200 [0.15, 127.0.0.1:65268][0m
+2024-11-28 05:06:07,885 - django.channels.server - INFO - [mHTTP GET /static/admin/js/prepopulate_init.js 200 [0.16, 127.0.0.1:65267][0m
+2024-11-28 05:06:07,921 - django.channels.server - INFO - [mHTTP GET /static/admin/css/widgets.css 200 [0.03, 127.0.0.1:65267][0m
+2024-11-28 05:06:07,927 - django.channels.server - INFO - [mHTTP GET /admin/jsi18n/ 200 [0.13, 127.0.0.1:65270][0m
+2024-11-28 05:06:07,982 - django.channels.server - INFO - [mHTTP GET /static/admin/js/change_form.js 200 [0.05, 127.0.0.1:65267][0m
+2024-11-28 05:06:08,135 - API.utils.LinesOfCode - INFO - Starting analysis for repository: AlmaMemento
+2024-11-28 05:06:08,399 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for Alegra
+2024-11-28 05:06:08,399 - API.utils.LinesOfCode - INFO - Analysis completed in 16.71 seconds
+2024-11-28 05:06:09,224 - API.utils.LinesOfCode - INFO - Starting analysis for repository: AlmaMemento
+2024-11-28 05:06:09,815 - API.utils.LinesOfCode - INFO - Repository AlmaMemento downloaded and extracted successfully
+2024-11-28 05:06:10,847 - API.utils.LinesOfCode - INFO - Repository AlmaMemento downloaded and extracted successfully
+2024-11-28 05:06:12,307 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for AlmaMemento
+2024-11-28 05:06:12,308 - API.utils.LinesOfCode - INFO - Analysis completed in 4.17 seconds
+2024-11-28 05:06:12,357 - API.utils.LinesOfCode - INFO - Starting analysis for repository: Bacoor_Exploration_Map
+2024-11-28 05:06:12,689 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for AlmaMemento
+2024-11-28 05:06:12,690 - API.utils.LinesOfCode - INFO - Analysis completed in 3.47 seconds
+2024-11-28 05:06:12,738 - API.utils.LinesOfCode - INFO - Starting analysis for repository: Bacoor_Exploration_Map
+2024-11-28 05:06:13,635 - API.utils.LinesOfCode - INFO - Repository Bacoor_Exploration_Map downloaded and extracted successfully
+2024-11-28 05:06:14,026 - API.utils.LinesOfCode - INFO - Repository Bacoor_Exploration_Map downloaded and extracted successfully
+2024-11-28 05:06:14,392 - django.channels.server - INFO - [32mHTTP POST /admin/Models/userrecord/166/change/ 302 [0.62, 127.0.0.1:65267][0m
+2024-11-28 05:06:14,490 - django.channels.server - INFO - [mHTTP GET /admin/Models/userrecord/ 200 [0.07, 127.0.0.1:65267][0m
+2024-11-28 05:06:14,537 - django.channels.server - INFO - [mHTTP GET /admin/jsi18n/ 200 [0.02, 127.0.0.1:65267][0m
+2024-11-28 05:06:14,568 - django.channels.server - INFO - [mHTTP GET /static/admin/img/icon-yes.svg 200 [0.01, 127.0.0.1:65267][0m
+2024-11-28 05:06:15,508 - API.utils.LinesOfCode - ERROR - Error processing file C:\Users\Winmri\AppData\Local\Temp\tmpx6gnt_eo\Bacoor_Exploration_Map-master\map\__init__.py: cannot mmap an empty file
+2024-11-28 05:06:15,819 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65229]
+2024-11-28 05:06:15,820 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65231]
+2024-11-28 05:06:15,994 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65345]
+2024-11-28 05:06:16,000 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65345]
+2024-11-28 05:06:16,019 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65347]
+2024-11-28 05:06:16,030 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65347]
+2024-11-28 05:06:16,055 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65345]
+2024-11-28 05:06:16,152 - API.utils.LinesOfCode - ERROR - Error processing file C:\Users\Winmri\AppData\Local\Temp\tmpx6gnt_eo\Bacoor_Exploration_Map-master\BacoorMap\__init__.py: cannot mmap an empty file
+2024-11-28 05:06:16,388 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65347]
+2024-11-28 05:06:16,444 - API.utils.LinesOfCode - ERROR - Error processing file C:\Users\Winmri\AppData\Local\Temp\tmpho5fs924\Bacoor_Exploration_Map-master\map\__init__.py: cannot mmap an empty file
+2024-11-28 05:06:16,515 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for Bacoor_Exploration_Map
+2024-11-28 05:06:16,516 - API.utils.LinesOfCode - INFO - Analysis completed in 4.16 seconds
+2024-11-28 05:06:16,537 - API.utils.LinesOfCode - INFO - Starting analysis for repository: Bank-GUI
+2024-11-28 05:06:16,823 - API.utils.LinesOfCode - ERROR - Error processing file C:\Users\Winmri\AppData\Local\Temp\tmpho5fs924\Bacoor_Exploration_Map-master\BacoorMap\__init__.py: cannot mmap an empty file
+2024-11-28 05:06:16,948 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for Bacoor_Exploration_Map
+2024-11-28 05:06:16,948 - API.utils.LinesOfCode - INFO - Analysis completed in 4.21 seconds
+2024-11-28 05:06:16,964 - API.utils.LinesOfCode - INFO - Starting analysis for repository: Bank-GUI
+2024-11-28 05:06:17,459 - API.utils.LinesOfCode - INFO - Repository Bank-GUI downloaded and extracted successfully
+2024-11-28 05:06:17,867 - API.utils.LinesOfCode - INFO - Repository Bank-GUI downloaded and extracted successfully
+2024-11-28 05:06:18,209 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for Bank-GUI
+2024-11-28 05:06:18,210 - API.utils.LinesOfCode - INFO - Analysis completed in 1.67 seconds
+2024-11-28 05:06:18,215 - API.utils.LinesOfCode - INFO - Starting analysis for repository: BetaPCParts
+2024-11-28 05:06:18,555 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for Bank-GUI
+2024-11-28 05:06:18,555 - API.utils.LinesOfCode - INFO - Analysis completed in 1.59 seconds
+2024-11-28 05:06:18,559 - API.utils.LinesOfCode - INFO - Starting analysis for repository: BetaPCParts
+2024-11-28 05:06:19,794 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65367]
+2024-11-28 05:06:19,799 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65367]
+2024-11-28 05:06:19,819 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65368]
+2024-11-28 05:06:19,875 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65367]
+2024-11-28 05:06:19,885 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65368]
+2024-11-28 05:06:20,042 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65368]
+2024-11-28 05:06:24,201 - API.utils.LinesOfCode - INFO - Repository BetaPCParts downloaded and extracted successfully
+2024-11-28 05:06:24,791 - API.utils.LinesOfCode - INFO - Repository BetaPCParts downloaded and extracted successfully
+2024-11-28 05:06:26,294 - daphne.server - WARNING - Application instance <Task pending name='Task-1' coro=<ASGIStaticFilesHandler.__call__() running at C:\Users\Winmri\AppData\Local\Programs\Python\Python39\lib\site-packages\django\contrib\staticfiles\handlers.py:101> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at C:\Users\Winmri\AppData\Local\Programs\Python\Python39\lib\asyncio\futures.py:384, <TaskWakeupMethWrapper object at 0x0000018BD286CD00>()]>> for connection <WebSocketProtocol client=['127.0.0.1', 65229] path=b'/ws/getLinesOfCode/definitelynotanassassin'> took too long to shut down and was killed.
+2024-11-28 05:06:26,300 - daphne.server - WARNING - Application instance <Task pending name='Task-7' coro=<ASGIStaticFilesHandler.__call__() running at C:\Users\Winmri\AppData\Local\Programs\Python\Python39\lib\site-packages\django\contrib\staticfiles\handlers.py:101> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at C:\Users\Winmri\AppData\Local\Programs\Python\Python39\lib\asyncio\futures.py:384, <TaskWakeupMethWrapper object at 0x0000018BD15847C0>()]>> for connection <WebSocketProtocol client=['127.0.0.1', 65231] path=b'/ws/getLinesOfCode/definitelynotanassassin'> took too long to shut down and was killed.
+2024-11-28 05:06:26,816 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for BetaPCParts
+2024-11-28 05:06:26,817 - API.utils.LinesOfCode - INFO - Analysis completed in 8.60 seconds
+2024-11-28 05:06:27,056 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for BetaPCParts
+2024-11-28 05:06:27,057 - API.utils.LinesOfCode - INFO - Analysis completed in 8.50 seconds
+2024-11-28 05:06:28,301 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65398]
+2024-11-28 05:06:28,305 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65398]
+2024-11-28 05:06:28,321 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65400]
+2024-11-28 05:06:28,329 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65400]
+2024-11-28 05:06:28,354 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65398]
+2024-11-28 05:06:28,444 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65400]
+2024-11-28 05:06:33,442 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65411]
+2024-11-28 05:06:33,445 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65411]
+2024-11-28 05:06:33,461 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65413]
+2024-11-28 05:06:33,475 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65413]
+2024-11-28 05:06:33,485 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65411]
+2024-11-28 05:06:33,561 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassiN [127.0.0.1:65413]
+2024-11-28 05:06:38,944 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65419]
+2024-11-28 05:06:38,948 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65419]
+2024-11-28 05:06:38,968 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65421]
+2024-11-28 05:06:38,978 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65421]
+2024-11-28 05:06:38,987 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65419]
+2024-11-28 05:06:39,177 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/definitelynotanassassin [127.0.0.1:65421]
