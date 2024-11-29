@@ -59,13 +59,19 @@ class LinesOfCodeConsumer(AsyncWebsocketConsumer):
                 lines_of_code += loc.get('loc', 0)
                 for lang, count in loc.get('locByLangs', {}).items():
                     lines_of_code_per_language[lang] = lines_of_code_per_language.get(lang, 0) + count
-
-            user_record = await sync_to_async(UserRecord.objects.create)(
-                username=username,
-                lines_of_code=lines_of_code,
-                lines_of_code_per_language=lines_of_code_per_language,
-                repositories=json.dumps(repositories)
-            )
+                    user_record, created = await sync_to_async(UserRecord.objects.get_or_create)(
+                        username=username,
+                        defaults={
+                            'lines_of_code': lines_of_code,
+                            'lines_of_code_per_language': lines_of_code_per_language,
+                            'repositories': json.dumps(repositories)
+                        }
+                    )
+                    if not created:
+                        user_record.lines_of_code = lines_of_code
+                        user_record.lines_of_code_per_language = lines_of_code_per_language
+                        user_record.repositories = json.dumps(repositories)
+                        await sync_to_async(user_record.save)()
             await self.send(text_data=json.dumps({'type': 'result', 'total_lines_of_code': user_record.lines_of_code, 'lines_of_code_per_language': lines_of_code_per_language}))
             await self.send(text_data=json.dumps({'type': 'complete'}))
         except Exception as e:

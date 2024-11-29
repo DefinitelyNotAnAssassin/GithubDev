@@ -3111,3 +3111,41 @@ RuntimeError: cannot schedule new futures after shutdown
 2024-11-29 16:47:45,049 - daphne.server - INFO - Listening on TCP address 127.0.0.1:8000
 2024-11-29 16:47:51,035 - django.channels.server - INFO - [mHTTP GET /admin/Models/userrecord/ 200 [5.07, 127.0.0.1:50086][0m
 2024-11-29 16:47:53,218 - django.channels.server - INFO - [mHTTP GET /admin/jsi18n/ 200 [2.16, 127.0.0.1:50086][0m
+2024-11-29 16:50:08,287 - daphne.server - INFO - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2024-11-29 16:50:08,288 - daphne.server - INFO - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2024-11-29 16:50:08,288 - daphne.server - INFO - Listening on TCP address 127.0.0.1:8000
+2024-11-29 16:50:14,595 - django.channels.server - INFO - [mHTTP GET /admin/Models/userrecord/ 200 [6.04, 127.0.0.1:50182][0m
+2024-11-29 16:50:16,769 - django.channels.server - INFO - [mHTTP GET /admin/jsi18n/ 200 [2.14, 127.0.0.1:50182][0m
+2024-11-29 16:58:33,517 - daphne.server - INFO - HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2024-11-29 16:58:33,517 - daphne.server - INFO - Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2024-11-29 16:58:33,518 - daphne.server - INFO - Listening on TCP address 127.0.0.1:8000
+2024-11-29 16:59:03,047 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/torvalds [127.0.0.1:50787]
+2024-11-29 16:59:03,070 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/torvalds [127.0.0.1:50787]
+2024-11-29 16:59:03,090 - django.channels.server - INFO - WebSocket HANDSHAKING /ws/getLinesOfCode/torvalds [127.0.0.1:50791]
+2024-11-29 16:59:04,975 - django.channels.server - INFO - WebSocket CONNECT /ws/getLinesOfCode/torvalds [127.0.0.1:50791]
+2024-11-29 16:59:05,572 - API.utils.LinesOfCode - INFO - Starting analysis for repository: pesconvert
+2024-11-29 16:59:07,417 - API.utils.LinesOfCode - INFO - Starting analysis for repository: pesconvert
+2024-11-29 16:59:07,711 - API.utils.LinesOfCode - INFO - Repository pesconvert downloaded and extracted successfully
+2024-11-29 16:59:08,336 - API.utils.LinesOfCode - INFO - Repository pesconvert downloaded and extracted successfully
+2024-11-29 16:59:08,381 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for pesconvert
+2024-11-29 16:59:08,382 - API.utils.LinesOfCode - INFO - Analysis completed in 2.81 seconds
+2024-11-29 16:59:08,930 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for pesconvert
+2024-11-29 16:59:08,930 - API.utils.LinesOfCode - INFO - Analysis completed in 1.51 seconds
+2024-11-29 16:59:13,636 - API.utils.LinesOfCode - INFO - Starting analysis for repository: test-tlb
+2024-11-29 16:59:14,091 - API.utils.LinesOfCode - INFO - Starting analysis for repository: test-tlb
+2024-11-29 16:59:15,189 - API.utils.LinesOfCode - INFO - Repository test-tlb downloaded and extracted successfully
+2024-11-29 16:59:15,694 - API.utils.LinesOfCode - INFO - Repository test-tlb downloaded and extracted successfully
+2024-11-29 16:59:15,819 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for test-tlb
+2024-11-29 16:59:15,820 - API.utils.LinesOfCode - INFO - Analysis completed in 2.18 seconds
+2024-11-29 16:59:16,161 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for test-tlb
+2024-11-29 16:59:16,162 - API.utils.LinesOfCode - INFO - Analysis completed in 2.07 seconds
+2024-11-29 16:59:18,692 - API.utils.LinesOfCode - INFO - Starting analysis for repository: uemacs
+2024-11-29 16:59:18,961 - API.utils.LinesOfCode - INFO - Starting analysis for repository: uemacs
+2024-11-29 16:59:20,509 - API.utils.LinesOfCode - INFO - Repository uemacs downloaded and extracted successfully
+2024-11-29 16:59:20,874 - API.utils.LinesOfCode - INFO - Repository uemacs downloaded and extracted successfully
+2024-11-29 16:59:21,384 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for uemacs
+2024-11-29 16:59:21,385 - API.utils.LinesOfCode - INFO - Analysis completed in 2.69 seconds
+2024-11-29 16:59:21,796 - API.utils.LinesOfCode - INFO - Logged directory and file type statistics for uemacs
+2024-11-29 16:59:21,796 - API.utils.LinesOfCode - INFO - Analysis completed in 2.84 seconds
+2024-11-29 16:59:30,052 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/torvalds [127.0.0.1:50787]
+2024-11-29 16:59:30,288 - django.channels.server - INFO - WebSocket DISCONNECT /ws/getLinesOfCode/torvalds [127.0.0.1:50791]
