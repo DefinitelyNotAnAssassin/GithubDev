@@ -24,7 +24,8 @@ default_ignore_extensions = {
     '.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp3', '.mp4', '.avi', '.mov', 
     '.pdf', '.zip', '.tar', '.gz', '.rar', '.7z', '.log', '.sqlite', '.db', 
     '.exe', '.dll', '.class', '.jar', '.war', '.swp', '.iml', '.lock', '.bak', 
-    '.iso', '.out',
+    '.iso', '.out', '.app', '.dmg', '.pkg', '.deb', '.rpm', '.msi', '.apk',
+    '.json',  '.yaml', '.yml', '.toml', '.ini', '.properties', '.env',
 
     # Configuration Files
     '.env', '.cfg', '.config', '.ini', '.properties', '.toml', '.yaml', '.yml', 
